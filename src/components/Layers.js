@@ -31,7 +31,7 @@ class Layer extends PureComponent {
   render () {
     const { layer }  = this.props;
     return (
-      <li className={`layer ${layer.selected && 'selected'}`} onClick={this.selectLayer}>
+      <li className={`layer ${layer.selected && 'selected'} ${layer.isObj ? 'bad' : 'good'}`} onClick={this.selectLayer}>
         <span>Layer : { layer.layer_id }</span>
         <button onClick={this.deleteLayer}>X</button>
       </li>
@@ -43,7 +43,6 @@ class Layers extends PureComponent {
 
   render() {
     const { layers, selectLayer, deleteLayer } = this.props;
-    console.log("LAYERS : ", layers);
     return (
       <ul className='layers'>
         { layers.map( l => <Layer key={l.layer_id} layer={l} selectLayer={selectLayer} deleteLayer={deleteLayer} /> ) }

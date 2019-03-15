@@ -5,3 +5,5 @@ export const ADD_LAYER_BADLY = 'ADD_LAYER_BADLY';
 export const DELETE_LAYER    = 'DELETE_LAYER';
 
 export const SELECT_LAYER    = 'SELECT_LAYER';
+
+export const SERIALIZE_STORE = 'SERIALIZE_STORE';

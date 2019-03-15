@@ -2,25 +2,28 @@ import {
   ADD_LAYER,
   ADD_LAYER_BADLY,
   DELETE_LAYER,
-  SELECT_LAYER
+  SELECT_LAYER,
+  SERIALIZE_STORE
 } from '../actions/types';
 
 const INITIAL = {};
 
-let next_id = 0;
+/* as you can see, the logic for adding a layer or adding one badly is identical.
+   It passes through either the data structure or the instantiated object and stores it.
+
+   But if you choose to serialize the store, the SERIALIZE_STORE action will simply
+   turn the store into a string and then back into an object, breaking those functions
+   on the inside.
+*/
 
 export default (state = INITIAL, action) => {
   switch(action.type) {
-    case ADD_LAYER : {
-      const layer_id = ++next_id;
+    case ADD_LAYER :
+    case ADD_LAYER_BADLY :
       return {
         ...state,
-        [layer_id] : {layer_id, selected : false, ...action.payload}
+        [action.payload.layer_id] : action.payload
       }
-    }
-    case ADD_LAYER_BADLY : {
-      break;
-    }
     case DELETE_LAYER : {
       const layer_id = action.payload;
       const newState = {...state};
@@ -40,6 +43,10 @@ export default (state = INITIAL, action) => {
         newState[layer.layer_id] = layer;
         return newState;
       }, {})
+    }
+    case SERIALIZE_STORE : {
+      const string = JSON.stringify(state);
+      return JSON.parse(string);
     }
     default :
       return state;

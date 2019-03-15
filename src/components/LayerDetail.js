@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { getSelectedLayer } from '../selectors';
+import { getSelectedLayer, getLayerObjects } from '../selectors';
+
+import { LayerObj } from '../utils';
 
 import './LayerDetail.css';
 
@@ -12,10 +14,10 @@ class LayerDetail extends PureComponent {
 
   render() {
 
-    const { layer = {} } = this.props;
+    const { layer = {}, layerObj = {} } = this.props;
     const { layer_id, name, color, magnitude } = layer;
 
-    const { results } = this.state;
+    const NOT = layer.isObj ? 'NOT' : '';
 
     return (
       <div className='layer-detail'>
@@ -25,8 +27,12 @@ class LayerDetail extends PureComponent {
             <span>Name:</span><span>{name}</span>
             <span>Color:</span><span>{color}</span>
             <span>Magnitude:</span><span>{magnitude}</span>
-            <button onClick={this.analyze}>Analyze</button>
-            <span>{results}</span>
+            <span>Function call:</span>
+            <span>{layer.explain()}</span>
+            <span className='notes'>
+              This object is {NOT} serializable.
+              You can {NOT} select this object after the store has been serialized.
+            </span>
           </React.Fragment>
         }
       </div>
@@ -34,9 +40,22 @@ class LayerDetail extends PureComponent {
   }
 }
 
+/* This is straightforward - it uses a selector to get the currently selected layer, and
+   it also gets a list of all layer objects via a separate selector. Then, if we have a
+   selected layer, it'll get the instantiated object. This code doesn't care if the object
+   is in redux or was created after the fact - it works trasparently either way.
+
+*/
+
 const mapStateToProps = (state) => {
+  const selectedLayer = getSelectedLayer(state);
+  const layerObjects = getLayerObjects(state);
+
+  const layer = selectedLayer
+    ? layerObjects[selectedLayer.layer_id]
+    : undefined
   return {
-    layer : getSelectedLayer(state)
+    layer
   }
 }
 

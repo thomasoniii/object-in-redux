@@ -17,3 +17,11 @@ li.layer:hover {
 li.layer.selected {
   border-color : black;
 }
+
+li.bad {
+  background-color : #FFAAAA;
+}
+
+li.good {
+  background-color : #AAFFAA;
+}

@@ -1,68 +1,37 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is probably more code than is worth it for such a simple demonstration.
 
-## Available Scripts
+See it live @ https://thomasoniii.github.io/object-in-redux
 
-In the project directory, you can run:
+All it does is demonstrate adding a "layer" object to the store in two different manners -
+it'll either create a formal object which has a method attached to it to call for more info
+or it'll just store the data related to the object and then create the formal object when
+it comes out of the store via a selector.
 
-### `npm start`
+To demonstrate, there's the "add layer" button which adds data to the store in a serializable
+manner, and the "add layer badly" button which adds data in a non-serializable manner.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Useful code to look at includes:
+* components/LayerDetail.js
+* actions/layers.js
+* reducers/layers.js
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+So how can we use this? The specific case that I was looking at was this line of code:
 
-### `npm test`
+layerFilerDimension = yield call(layerCrossfilter.dimension, geocol)
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+which is creating a dimension object using a geocol value. Instead, don't create that object.
+Just store the geocol in the store and write up a selector to create the dimension object upon
+access not save. All references to the dimension object would need to be updated to retrieve
+it in that manner, but then it should resolve the issue.
 
-### `npm run build`
+Alternatively, it could just be instantiated with no need for a selector at all. So
+instead of doing this:
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+lineLayer.dimension.foo()
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+you'd do this:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+const dimension = LayerCrossFilter.dimension(layer.geocol);
+dimension.foo();
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+That LayerCrossFilter.dimension could be wrapped up and abstracted, but it may not be necessary.

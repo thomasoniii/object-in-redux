@@ -6,8 +6,8 @@ import { addLayer, addLayerBadly } from '../actions';
 import './AddLayer.css';
 
 const INIT = {
-  name      : '',
-  color     : '',
+  name      : 'some name',
+  color     : 'some color',
   magnitude : 0
 }
 

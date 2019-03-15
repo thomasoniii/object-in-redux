@@ -1,5 +1,9 @@
 .layer-detail {
   display : grid;
   grid-template-columns : 1fr 1fr;
-  grid-template-rows : repeat(5, 1em);
+  grid-template-rows : repeat(5, 1.5em), 7em;
+}
+
+.layer-detail .notes {
+  grid-column: span 2;
 }
