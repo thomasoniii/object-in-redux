@@ -1,0 +1,12 @@
+.add-layer {
+  display : grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.good-button {
+  background-color : #AAFFAA;
+}
+
+.bad-button {
+  background-color : #FFAAAA;
+}

@@ -1,0 +1,19 @@
+ul.layers {
+  padding-left : 0
+}
+
+li.layer {
+  list-style: none;
+  display : grid;
+  grid-template-columns : 5fr 1fr;
+  cursor : pointer;
+  border : 1px solid white;
+}
+
+li.layer:hover {
+  border-color : green;
+}
+
+li.layer.selected {
+  border-color : black;
+}
